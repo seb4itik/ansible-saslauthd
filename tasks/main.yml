@@ -1,0 +1,37 @@
+- name: Install packages
+  ansible.builtin.apt:
+    name:
+      - "sasl2-bin"
+  notify: Restart saslauthd
+
+- name: Configure saslauthd daemon startup
+  ansible.builtin.lineinfile:
+    path: "/etc/default/saslauthd"
+    search_string: "{{ item.param }}="
+    line: "{{ item.param }}={{ item.value }}"
+  loop:
+    - param: "START"
+      value: "yes"
+    - param: "MECHANISMS"
+      value: "\"{{ saslauthd_mechanisms | join(' ') }}\""
+    - param: "MECH_OPTIONS"
+      value: "{{ saslauthd_mech_options }}"
+    - param: "THREADS"
+      value: "{{ saslauthd_threads }}"
+    - param: "OPTIONS"
+      value: "{{ saslauthd_options }}"
+  notify: Restart saslauthd
+
+- name: Generate saslauthd.conf (for "ldap" mechanism)
+  when: "'ldap' in saslauthd_mechanisms"
+  ansible.builtin.template:
+    src: "templates/saslauthd.conf"
+    dest: "/etc/saslauthd.conf"
+    mode: "0644"
+  notify: Restart saslauthd
+
+- name: Enable saslauthd service
+  ansible.builtin.service:
+    name: "saslauthd"
+    state: "started"
+    enabled: true
