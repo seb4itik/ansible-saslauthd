@@ -20,7 +20,7 @@ galaxy_info:
 #       - "jammy"
 
   galaxy_tags:
-    - "cyrus-sasl"
+    - "cyrussasl"
     - "saslauthd"
     - "sasl"
 
