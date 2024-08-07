@@ -4,3 +4,4 @@ saslauthd_threads: 5
 saslauthd_options: "-c -m /var/run/saslauthd"
 saslauthd_ldap_config:
   ldap_version: 3
+saslauthd_cacert_file: "/etc/ssl/certs/ca-certificates.crt"

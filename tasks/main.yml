@@ -4,6 +4,18 @@
       - "sasl2-bin"
   notify: Restart saslauthd
 
+- name: Create /etc/ldap directory
+  ansible.builtin.file:
+    dest: "/etc/ldap"
+    state: "directory"
+    mode: "0755"
+
+- name: Create /etc/ldap/ldap.conf file
+  ansible.builtin.template:
+    src: "templates/ldap.conf"
+    dest: "/etc/ldap/ldap.conf"
+    mode: "0644"
+
 - name: Configure saslauthd daemon startup
   ansible.builtin.lineinfile:
     path: "/etc/default/saslauthd"
