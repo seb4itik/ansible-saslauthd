@@ -25,10 +25,10 @@ This role must be run as `root` but will **not** `become` by itself.
 | `saslauthd_mech_options`      | `""`                | Mechanism specific options (`-O` of `saslauthd`, see `saslauthd(8)`).                 |
 | `saslauthd_threads`           | `5`                 | Use threads processes for responding to authentication queries (`-n`).                |
 | `saslauthd_options`           | `"-c -m /var/run/saslauthd"` | All other options for `saslauthd` (see `saslauthd(8)`).                      |
-| `saslauthd_mech_ldap_servers` | required if `saslauthd_mechanism` is `ldap` | Arrays of LDAP servers (`ldap_servers` in `saslauthd.conf`).  |
+| `saslauthd_mech_ldap_servers` | required if `saslauthd_mechanism` is `ldap` | Array of LDAP servers (`ldap_servers` in `saslauthd.conf`).   |
 | `saslauthd_mech_ldap_search_base` | required if `saslauthd_mechanism` is `ldap` | Search base for LDAP requests (`ldap_search_base` in `saslauthd.conf`). |
-| `saslauthd_mech_ldap_config`  | `{ldap_version: 3}` | Options for `ldap` mechanism to be writen into `/etc/saslauthd.conf`.                 |
-| `saslauthd_lib_ldap_config`   | `{TLS_CACERT: "/etc/ssl/certs/ca-certificates.crt"}` | Options for LDAP library to be writen into `/etc/ldap/ldap.conf` (see `ldap.conf(5)`). |
+| `saslauthd_mech_ldap_config`  | `{ldap_version: 3}` | Options for `ldap` mechanism to be written into `/etc/saslauthd.conf`.                |
+| `saslauthd_lib_ldap_config`   | `{TLS_CACERT: "/etc/ssl/certs/ca-certificates.crt"}` | Options for LDAP library to be written into `/etc/ldap/ldap.conf` (see `ldap.conf(5)`). |
 
 
 ## Dependencies
