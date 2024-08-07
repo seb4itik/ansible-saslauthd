@@ -2,3 +2,4 @@
   ansible.builtin.service:
     name: "saslauthd"
     state: "restarted"
+    enabled: true

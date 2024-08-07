@@ -1,22 +1,11 @@
 - name: Install packages
+  notify: Restart saslauthd
   ansible.builtin.apt:
     name:
       - "sasl2-bin"
-  notify: Restart saslauthd
-
-- name: Create /etc/ldap directory
-  ansible.builtin.file:
-    dest: "/etc/ldap"
-    state: "directory"
-    mode: "0755"
-
-- name: Create /etc/ldap/ldap.conf file
-  ansible.builtin.template:
-    src: "templates/ldap.conf"
-    dest: "/etc/ldap/ldap.conf"
-    mode: "0644"
 
 - name: Configure saslauthd daemon startup
+  notify: Restart saslauthd
   ansible.builtin.lineinfile:
     path: "/etc/default/saslauthd"
     search_string: "{{ item.param }}="
@@ -25,25 +14,34 @@
     - param: "START"
       value: "yes"
     - param: "MECHANISMS"
-      value: "\"{{ saslauthd_mechanisms | join(' ') }}\""
+      value: "{{ saslauthd_mechanism }}"
     - param: "MECH_OPTIONS"
       value: "{{ saslauthd_mech_options }}"
     - param: "THREADS"
       value: "{{ saslauthd_threads }}"
     - param: "OPTIONS"
       value: "{{ saslauthd_options }}"
-  notify: Restart saslauthd
 
-- name: Generate saslauthd.conf (for "ldap" mechanism)
-  when: "'ldap' in saslauthd_mechanisms"
-  ansible.builtin.template:
-    src: "templates/saslauthd.conf"
-    dest: "/etc/saslauthd.conf"
-    mode: "0644"
+- name: Configure "ldap" mechanism
+  when: "'ldap' in saslauthd_mechanism"
   notify: Restart saslauthd
-
-- name: Enable saslauthd service
-  ansible.builtin.service:
-    name: "saslauthd"
-    state: "started"
-    enabled: true
+  block:
+    - name: Install ca-certificates package
+      ansible.builtin.apt:
+        name:
+          - "ca-certificates"
+    - name: Create /etc/ldap directory
+      ansible.builtin.file:
+        dest: "/etc/ldap"
+        state: "directory"
+        mode: "0755"
+    - name: Create /etc/ldap/ldap.conf file
+      ansible.builtin.template:
+        src: "templates/ldap.conf"
+        dest: "/etc/ldap/ldap.conf"
+        mode: "0644"
+    - name: Create /etc/saslauthd.conf file
+      ansible.builtin.template:
+        src: "templates/saslauthd.conf"
+        dest: "/etc/saslauthd.conf"
+        mode: "0644"
