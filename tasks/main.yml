@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - "sasl2-bin"
+      - "libsasl2-modules"
 
 - name: Configure saslauthd daemon startup
   notify: Restart saslauthd

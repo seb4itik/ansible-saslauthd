@@ -64,7 +64,6 @@ More complete example:
 
 ## TODO
 
-FIXME
 - Write tests.
 - Other platforms (Ubuntu, Redhat, ...).
 
