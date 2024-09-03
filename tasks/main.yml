@@ -4,6 +4,7 @@
     name:
       - "sasl2-bin"
       - "libsasl2-modules"
+  notify: Restart saslauthd
 
 - name: Configure saslauthd daemon startup
   notify: Restart saslauthd
